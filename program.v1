@@ -1,0 +1,49 @@
+import os
+
+def clear_terminal():
+    # 'nt' is for Windows, 'posix' is for Linux/macOS
+    if os.name == 'nt':
+        os.system('cls')
+    else:
+        os.system('clear')
+
+f = open("stagefile.py", "r")
+r,c=(f.readline().split(','))
+r,c=int(r),int(c)
+global grid
+grid=[list(f.readline().strip())for _ in range(r)]
+
+global sg
+sg=[]
+
+moveset={'W':(0,-1),'A':(-1,0),'S':(0,1),'D':(1,0),'w':(0,-1),'a':(-1,0),'s':(0,1),'d':(1,0)}
+
+def find_character(r,c,grid):
+    for i in range(r):
+        for j in range(c):
+            if grid[i][j] == 'L': return (i,j)
+global p
+p = find_character(r,c,grid)
+
+
+while True:
+    clear_terminal()
+    for i in range(r):
+        sg.append('\n')
+        for j in range(c):
+            a=grid[i][j]
+            sg.append(a)
+    subgrid=''.join(sg)
+    print(subgrid)
+
+    move = input('> ')
+    for x in move:
+        if x in list(moveset):
+            dc,dr=moveset[x]
+            pr,pc=p
+            nc,nr=(pc+dc),(pr+dr)
+            if nc<0 or nc>=c: nc=pc
+            if nr<0 or nr>=r: nr=pr
+            grid[pr][pc]='.'
+            grid[nr][nc]='L'
+            p=nr,nc
